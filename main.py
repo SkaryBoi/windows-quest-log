@@ -1,9 +1,10 @@
+﻿from io import UnsupportedOperation
 import tkinter as tk
-from venv import create
 
 #pystray and PIL must be imported together, pystray only uses images and .icos from PIL
 import pystray 
 from PIL import Image
+
 
 # extending the class tk.Tk, which means we initialize a new one
 # (which is what we were going to do anyway to get a window)
@@ -21,7 +22,9 @@ class Quest(tk.Tk):
         # here, it's -25+25 for 25 pixels from the right of the screen and 25 pixels from the top
         #win.geometry(str(width)+"x"+str(height)+"-25+25")
 
-        self.geometry("500x500-25+25")
+        
+
+        self.geometry("200x200-25+25")
 
         # this is so everything except things we want to show are invisible,
         # so from here on we assume "green" to just be "alpha" or "transparent" like a green screen
@@ -105,8 +108,30 @@ def displayQuest():
     display2 = tk.Label(__win, text=entry2.get())
     display2.pack()
 
+    # always add the same flip button
+    posButton = tk.Button(__win, text="↑↓", command=flipQuestPos)
+    posButton.pack()
+
+    # to keep track of where the window is
+    # we do it here because uhhhh
+    global upperRight
+    upperRight = True
+
     # we also want to delete the input window
     inputwindow.destroy()
+
+def flipQuestPos():
+    # even though this is required LITERALLY FUCKING NOWHERE ELSE
+    # we have to SPECIFY that we are talking about the global variable
+    # for SOME UNKNOWN REASON
+    global upperRight
+
+    if upperRight == True:
+        __win.geometry("-25-25")
+        upperRight = False
+    else:
+        __win.geometry("-25+25")
+        upperRight = True
 
 
 if __name__ == "__main__":
